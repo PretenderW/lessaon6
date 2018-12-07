@@ -23,15 +23,9 @@ let user;
     try{
         user = new User();
         user.pk = 2;
-        const result = await user.load();
-        let j = 0;
-        for (let key in result){
-          user.fields[j++] = result[key];
-          //console.log(key + " - " + result[key]);
-        }
-        let car = new Car();
+        await user.load();
+        const res = await Car.loadAll();
         let cars = [];
-        const res = await car.loadAll();
         let n = 0;
         for (let i in res){
           cars[i] = new Car();
@@ -82,11 +76,7 @@ let user;
     try{
         let user = new User();
         user.pk = 1;
-        const result = await user.load();
-        let j = 0;
-        for (let key in result){
-          user.fields[j++] = result[key];
-        }
+        await user.load();
         user.setName('Ivan','Sidorov');
         //user.setName('Ivan','Ivanov');
         user.save(new User());
@@ -103,11 +93,10 @@ let user;
 });
 
 // Удалить пользователя
-let user1;
+let user1 = new User;
 (async function (){
     try{
-        user1 = new User();
-        const result = await user1.loadAll();
+        const result = await User.loadAll();
         let j = 0;
         for (let i in result){
            j++;
@@ -130,7 +119,7 @@ let user1;
 
     try{
         let car = new Car();
-        car.setData(2, 'BMW', '2018');
+        car.setData(user.pk, 'BMW', '2018');
         console.log("-------------------------------------------------------");
         console.log("5)Добавление пользователю новой машини");
         console.log("-------------------------------------------------------");
