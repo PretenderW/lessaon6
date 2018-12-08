@@ -17,10 +17,11 @@ class User extends Model {
         foreignKey: 'user_id'
       }
     ];
+    this.data = [];
   }
 
   toString(){
-     let str = `User pk : ${this.pk}  fields : [ ${this.fields.join(', ')}]\n`;
+     let str = `User data : [ ${this.data.join(', ')}]\n`;
      for (let key in this.hasMany){
         str += `${this.hasMany[key].model}
         primaryKey: ${this.hasMany[key].primaryKey}
@@ -30,13 +31,12 @@ class User extends Model {
    };
 
   setData(first_name, last_name, age, gender){
-    this.fields = [this.fields[0], first_name, last_name, age, gender];
+    this.data = [0, first_name, last_name, age, gender];
   }
 
   setName(first_name, last_name){
-    this.fields = [this.fields[0], first_name, last_name, this.fields[3], this.fields[4]];
+    this.data = [this.data[0], first_name, last_name, this.data[3], this.data[4]];
   }
-
 }
 
 module.exports = User;

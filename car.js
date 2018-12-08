@@ -9,14 +9,15 @@ class Car extends Model {
     super();
     this.pk = 'id';
     this.fields = ['id', 'user_id', 'model', 'year'];
+    this.data = [];
   }
 
   toString(){
-     return `Car pk : ${this.pk} fields : [ ${this.fields.join(', ')}]`;
+     return `Car data : [ ${this.data.join(', ')}]`;
     };
 
   setData(id, model, year){
-    this.fields = [this.fields[0], id, model, year];
+    this.data = [0, id, model, year];
   }
 }
 

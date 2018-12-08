@@ -18,12 +18,11 @@ global.db = mysql.createConnection({
 global.db.query = util.promisify(global.db.query);
 
 // Открыть с БД и вывести в консоль сузествующего пользователя с машинами
-let user;
+let user2 = new User();
 (async function (){
     try{
-        user = new User();
-        user.pk = 2;
-        await user.load();
+        const user_id = 2;
+        await user2.load(user_id);
         const res = await Car.loadAll();
         let cars = [];
         let n = 0;
@@ -31,14 +30,14 @@ let user;
           cars[i] = new Car();
           j = 0;
           for (let key in res[i]){
-            cars[i].fields[j++] = res[i][key];
+            cars[i].data[j++] = res[i][key];
           }
-          cars[i].pk = res[i]['id'];
-          if (user.pk == cars[i].fields[1]){
-            user.hasMany[n] = {
+          cars[i].pk = res[i][cars[i].fields[0]];
+          if (user2.pk == cars[i].data[1]){
+            user2.hasMany[n] = {
                 model : cars[i],
-                primaryKey : cars[i].fields[0],
-                foreignKey : cars[i].fields[1]
+                primaryKey : cars[i].data[0],
+                foreignKey : cars[i].data[1]
                 }
             n++;
           }
@@ -51,7 +50,7 @@ let user;
     console.log("-------------------------------------------------------")
     console.log("1)Открыть БД и вывести в консоль существующего пользователя с машинами");
     console.log("-------------------------------------------------------")
-    console.log(user.toString());
+    console.log(user2.toString());
     console.log("-----------------END-------------------------------");
 });
 
@@ -62,7 +61,7 @@ let user;
         console.log("-------------------------------------------------------")
         let user = new User()
         user.setData('Petr', 'Petrov', 25, 'M');
-        user.save(new User());
+        user.save();
     }catch(e){
       console.log('error\n');
       console.log(e);
@@ -70,16 +69,15 @@ let user;
   console.log("Пользователь добавлен");
   console.log("-----------------END----------------------------------");
 
-
 // Изменить имя пользователю
 (async function (){
     try{
-        let user = new User();
-        user.pk = 1;
-        await user.load();
-        user.setName('Ivan','Sidorov');
-        //user.setName('Ivan','Ivanov');
-        user.save(new User());
+        let user1 = new User();
+        const user_id = 1;
+        await user1.load(user_id);
+        user1.setName('Ivan','Sidorov');
+        //user1.setName('Ivan','Ivanov');
+        user1.save();
     }catch(e){
         console.log('error\n');
         console.log(e);
@@ -116,21 +114,22 @@ let user1 = new User;
     console.log("-----------------END-------------------------------");
 });
 // Добавить пользователю новую машину
-
+let car = new Car();
+(async function (){
     try{
-        let car = new Car();
+        let user = new User();
+        const user_id = 2;
+        await user.load(user_id);
         car.setData(user.pk, 'BMW', '2018');
-        console.log("-------------------------------------------------------");
-        console.log("5)Добавление пользователю новой машини");
-        console.log("-------------------------------------------------------");
-        car.save(new Car());
-        console.log("Машина добавлена");
-        console.log("-----------------END-------------------------------");
     }catch(e){
         console.log('error\n');
         console.log(e);
     }
-
-
-
-//global.db.end();
+  })().then(res => {
+    console.log("-------------------------------------------------------");
+    console.log("5)Добавление пользователю новой машини");
+    console.log("-------------------------------------------------------");
+    car.save();
+    console.log("Машина добавлена");
+    console.log("-----------------END-------------------------------");
+  });
